@@ -25,21 +25,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-input-video-capture-dialog id="inputVideoCapture"
         no-cancel-on-outside-click with-backdrop
         src="{{videoUrl}}" capture-url="{{captureUrl}}"
-        capture-width="{{captureWidth}}">
+        capture-width="{{captureWidth}}" on-capture-confirmed="_setCaptureConfirmed">
         <h2>Play the video and click "capture" to take a video snapshot.</h2>
       </paper-input-video-capture-dialog>
       <paper-input label="Capture width" type="number" value="{{captureWidth}}"></paper-input>
       <paper-button raised on-tap="search">SEARCH VIDEO TO CAPTURE</paper-button>
-      <h1>Selected video</h1>
-      <video controls src="[[videoUrl]]"></video>
-      <h1>Selected video capture</h1>
-      <img src="[[captureUrl]]">
+      <template is="dom-if" if="[[captureConfirmed]]">
+        <h1>Selected video</h1>
+        <video controls src="[[videoUrl]]"></video>
+        <h1>Selected video capture</h1>
+        <img src="[[captureUrl]]">
+      </template>
     </template>
 
     <script>
     var scope = document.getElementById('scope');
+    scope.captureConfirmed = false;
     scope.search = function() {
       this.$.inputVideoCapture.search();
+    }
+    scope._setCaptureConfirmed = function() {
+      console.log("prout");
+      this.captureConfirmed = true;
     }
     scope.captureWidth = 200;
     </script>

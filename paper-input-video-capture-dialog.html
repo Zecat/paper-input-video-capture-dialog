@@ -63,9 +63,9 @@ Example:
     <iron-image src="[[captureUrl]]"></iron-image>
 
     <div class="buttons">
-      <paper-button on-tap="close">Cancel</paper-button>
+      <paper-button on-tap="cancel">Cancel</paper-button>
       <paper-button on-tap="_capture">[[captureButtonText]]</paper-button>
-      <paper-button disabled="[[captured]]" on-tap="close">Continue</paper-button>
+      <paper-button disabled="[[captured]]" on-tap="_confirm">Continue</paper-button>
     </div>
 
     
@@ -127,6 +127,11 @@ Example:
 
       _computeSrc: function(importedVideo) {
         return window.URL.createObjectURL(importedVideo);
+      },
+
+      _confirm : function() {
+        this.close();
+        this.fire('capture-confirmed');
       },
 
       behaviors: [
