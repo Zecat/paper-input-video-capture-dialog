@@ -1,0 +1,33 @@
+{
+  "name": "paper-input-video-capture-dialog",
+  "version": "1.0.0",
+  "authors": [
+    "Zecat <jullienfelix@gmail.com>"
+  ],
+  "description": "",
+  "keywords": [
+    "web-component",
+    "polymer",
+    "seed"
+  ],
+  "main": "paper-input-video-capture-dialog.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/Zecat/paper-input-video-capture-dialog/",
+  "ignore": [
+    "/.*",
+    "/test/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.2.0",
+    "paper-dialog-behavior": "PolymerElements/paper-dialog-behavior#~1.1.0",
+    "iron-video-capture": "Zecat/iron-video-capture#~1.0.0",
+    "paper-button": "PolymerElements/paper-button#~1.0.11",
+    "iron-image": "PolymerElements/iron-image#~1.0.4"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "^3.4.0",
+    "paper-styles": "PolymerElements/paper-styles#~1.0.13",
+    "paper-input": "PolymerElements/paper-input#~1.1.3"
+  }
+}

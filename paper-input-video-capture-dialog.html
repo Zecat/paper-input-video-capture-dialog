@@ -1,0 +1,129 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../iron-video-capture/iron-video-capture.html">
+<link rel="import" href="../iron-image/iron-image.html">
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-dialog-behavior/paper-dialog-behavior.html">
+<link rel="import" href="../paper-dialog-behavior/paper-dialog-shared-styles.html">
+
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+
+  ```html
+    <template is="dom-bind" id="scope">
+      <paper-input-video-capture-dialog id="inputVideoCapture">
+      </paper-input-video-capture-dialog>
+      <button on-tap="search">SEARCH VIDEO TO CAPTURE</button>
+    </template>
+
+    <script>
+    var scope = document.getElementById('scope');
+    scope.search = function() {
+      this.$.inputVideoCapture.search();
+    }
+    </script>
+  ```
+
+
+@demo demo/index.html
+@hero hero.svg
+-->
+
+<dom-module id="paper-input-video-capture-dialog">
+  <template>
+    <style include="paper-dialog-shared-styles">
+      :host {
+        display: block;
+        box-sizing: border-box;
+      }
+      video, iron-image {
+        padding: 0;
+        max-width: 100%;
+      }
+    </style>
+
+    <content></content>
+
+    <input hidden id="videoSelector" files='{{importedVideosList::change}}' type="file" accept="video/*">
+
+    <video is="iron-video-capture" id="videoCapture" src="[[src]]" controls
+    capture-url="{{captureUrl}}" capture-width="[[captureWidth]]" on-loadeddata="open">
+    </video>
+
+    <iron-image src="[[captureUrl]]"></iron-image>
+
+    <div class="buttons">
+      <paper-button dialog-dismiss>Cancel</paper-button>
+      <paper-button on-tap="_capture">[[captureButtonText]]</paper-button>
+      <paper-button dialog-confirm>Continue</paper-button>
+    </div>
+
+    
+  </template>
+
+  <script>
+    Polymer({
+      is: 'paper-input-video-capture-dialog',
+
+      properties: {
+        importedVideo: {
+          type: Object,
+          computed: '_computeImportedVideo(importedVideosList)',
+          observer: '_importedVideoChange',
+          notify: true
+        },
+        captureButtonText: {
+          type: String,
+          value: 'capture'
+        },
+        captureUrl: {
+          type: String,
+          value: '',
+          notify: true
+        },
+        captureWidth: {
+          type: Number,
+          value: 200
+        },
+        src: {
+          type: String,
+          value: '',
+          computed: '_computeSrc(importedVideo)',
+          notify: true
+        }
+      },
+
+      search: function() {
+        this.$.videoSelector.dispatchEvent(new Event('click'));
+      },
+
+      _capture: function() {
+        this.$.videoCapture.capture();
+        this.refit();
+      },
+
+      _computeImportedVideo: function(importedVideosList) {
+        return importedVideosList[0];
+      },
+
+      _computeSrc: function(importedVideo) {
+        return window.URL.createObjectURL(importedVideo);
+      },
+
+      behaviors: [
+        Polymer.PaperDialogBehavior
+      ]
+
+    });
+  </script>
+</dom-module>
