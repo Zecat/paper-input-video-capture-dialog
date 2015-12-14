@@ -63,9 +63,9 @@ Example:
     <iron-image src="[[captureUrl]]"></iron-image>
 
     <div class="buttons">
-      <paper-button dialog-dismiss>Cancel</paper-button>
+      <paper-button on-tap="close">Cancel</paper-button>
       <paper-button on-tap="_capture">[[captureButtonText]]</paper-button>
-      <paper-button dialog-confirm>Continue</paper-button>
+      <paper-button disabled="[[captured]]" on-tap="close">Continue</paper-button>
     </div>
 
     
@@ -85,6 +85,11 @@ Example:
         captureButtonText: {
           type: String,
           value: 'capture'
+        },
+        captured: {
+          type: Boolean,
+          value: false,
+          computed: '_computeCaptured(captureUrl)'
         },
         captureUrl: {
           type: String,
@@ -110,6 +115,10 @@ Example:
       _capture: function() {
         this.$.videoCapture.capture();
         this.refit();
+      },
+
+      _computeCaptured: function(captureUrl) {
+        return captureUrl ? false : true;
       },
 
       _computeImportedVideo: function(importedVideosList) {
