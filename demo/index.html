@@ -23,9 +23,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <template is="dom-bind" id="scope">
       <paper-input-video-capture-dialog id="inputVideoCapture"
-        no-cancel-on-outside-click with-backdrop
-        src="{{videoUrl}}" capture-url="{{captureUrl}}"
-        capture-width="{{captureWidth}}" on-capture-confirmed="_setCaptureConfirmed">
+        src="{{videoUrl}}" no-cancel-on-outside-click with-backdrop
+        capture-url="{{captureUrl}}" capture-width="{{captureWidth}}"
+        capture-width="{{captureWidth}}" on-capture-confirmed="_setCaptureConfirmed"
+        capture-file="{{captureFile}}">
         <h2>Play the video and click "capture" to take a video snapshot.</h2>
       </paper-input-video-capture-dialog>
       <paper-input label="Capture width" type="number" value="{{captureWidth}}"></paper-input>
@@ -45,8 +46,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       this.$.inputVideoCapture.search();
     }
     scope._setCaptureConfirmed = function() {
-      console.log("prout");
       this.captureConfirmed = true;
+      console.log(scope.captureFile);
     }
     scope.captureWidth = 200;
     </script>

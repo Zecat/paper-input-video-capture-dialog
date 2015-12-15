@@ -9,13 +9,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 <link rel="import" href="../iron-video-capture/iron-video-capture.html">
 <link rel="import" href="../iron-image/iron-image.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-dialog-behavior/paper-dialog-behavior.html">
 <link rel="import" href="../paper-dialog-behavior/paper-dialog-shared-styles.html">
 
 <!--
-An element providing a solution to no problem in particular.
+This element give you the ability to import a video from your local disk, and 
+then open it in a dialog where you can play it and take a snapshot of the 
+current frame.
+
+To use, just gives it and id and call 'search()'.
+
+This is just a wrapper arrount an input type file and 
+[iron-video-capture](https://github.com/Zecat/iron-video-capture).
 
 Example:
 
@@ -27,10 +35,10 @@ Example:
     </template>
 
     <script>
-    var scope = document.getElementById('scope');
-    scope.search = function() {
-      this.$.inputVideoCapture.search();
-    }
+      var scope = document.getElementById('scope');
+      scope.search = function() {
+        this.$.inputVideoCapture.search();
+      }
     </script>
   ```
 
@@ -45,27 +53,31 @@ Example:
       :host {
         display: block;
         box-sizing: border-box;
-      }
-      video, iron-image {
-        padding: 0;
         max-width: 100%;
+        @apply(--layout-vertical);
+      }
+      video {
+        padding: 0;
+      }
+      iron-image {
+        width: 200px;
+        @apply(--layout-self-center);
       }
     </style>
 
     <content></content>
-
+    
     <input hidden id="videoSelector" files='{{importedVideosList::change}}' type="file" accept="video/*">
-
     <video is="iron-video-capture" id="videoCapture" src="[[src]]" controls
-    capture-url="{{captureUrl}}" capture-width="[[captureWidth]]" on-loadeddata="open">
+    capture-url="{{captureUrl}}" capture-width="[[captureWidth]]" on-loadeddata="open"
+    capture-file="{{captureFile}}" no-catpture-file="[[noCaptureFile]]">
     </video>
-
     <iron-image src="[[captureUrl]]"></iron-image>
-
+    
     <div class="buttons">
-      <paper-button on-tap="cancel">Cancel</paper-button>
+      <paper-button on-tap="cancel">[[cancelButtonText]]</paper-button>
       <paper-button on-tap="_capture">[[captureButtonText]]</paper-button>
-      <paper-button disabled="[[captured]]" on-tap="_confirm">Continue</paper-button>
+      <paper-button disabled="[[captured]]" on-tap="_confirm">[[confirmButtonText]]</paper-button>
     </div>
 
     
@@ -76,6 +88,7 @@ Example:
       is: 'paper-input-video-capture-dialog',
 
       properties: {
+        importedVideosList: Object,
         importedVideo: {
           type: Object,
           computed: '_computeImportedVideo(importedVideosList)',
@@ -83,12 +96,19 @@ Example:
         },
         captureButtonText: {
           type: String,
-          value: 'capture'
+          value: 'CAPTURE'
         },
         captured: {
           type: Boolean,
           value: false,
           computed: '_computeCaptured(captureUrl)'
+        },
+        captureFile: {
+          type: Object,
+          value: function() {
+            return {};
+          },
+          notify: true
         },
         captureUrl: {
           type: String,
@@ -98,6 +118,18 @@ Example:
         captureWidth: {
           type: Number,
           value: 200
+        },
+        cancelButtonText: {
+          type: String,
+          value: 'CANCEL'
+        },
+        confirmButtonText: {
+          type: String,
+          value: 'CONFIRM'
+        },
+        noCaptureFile: {
+          type: Boolean,
+          value: false
         },
         src: {
           type: String,
