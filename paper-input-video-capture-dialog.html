@@ -20,10 +20,12 @@ This element give you the ability to import a video from your local disk, and
 then open it in a dialog where you can play it and take a snapshot of the 
 current frame.
 
-To use, just gives it and id and call 'search()'.
+To use, just bind to the attributes it provides, and call 'search()' on it.
 
-This is just a wrapper arrount an input type file and 
-[iron-video-capture](https://github.com/Zecat/iron-video-capture).
+It is just a wrapper arround an input type file and 
+[iron-video-capture](https://github.com/Zecat/iron-video-capture), and it 
+implement Polymer.PaperDialogBehavior.
+
 
 Example:
 
@@ -88,20 +90,32 @@ Example:
       is: 'paper-input-video-capture-dialog',
 
       properties: {
+        /**
+         * The imported video file.
+         */
         videoFile: {
           type: Object,
           computed: '_computeVideoFile(_importedVideos)',
           notify: true
         },
+        /**
+         * The dialog's capture button text.
+         */
         captureButtonText: {
           type: String,
           value: 'CAPTURE'
         },
+        /**
+         * If true, a capture was taken
+         */
         captured: {
           type: Boolean,
           value: false,
           computed: '_computeCaptured(captureUrl)'
         },
+        /**
+         * Bind to ```<iron-video-capture>```'s captureFile property
+         */
         captureFile: {
           type: Object,
           value: function() {
@@ -109,23 +123,38 @@ Example:
           },
           notify: true
         },
+        /**
+         * Bind to ```<iron-video-capture>```'s captureUrl property
+         */
         captureUrl: {
           type: String,
           value: '',
           notify: true
         },
+        /**
+         * Bind to ```<iron-video-capture>```'s captureWidth property
+         */
         captureWidth: {
           type: Number,
           value: 200
         },
+        /**
+         * The dialog's cancel button text
+         */
         cancelButtonText: {
           type: String,
           value: 'CANCEL'
         },
+        /**
+         * The dialog's confirm button text
+         */
         confirmButtonText: {
           type: String,
           value: 'CONFIRM'
         },
+        /**
+         * Bind to ```<video is="iron-video-capture">```'s noCaptureFile property.
+         */
         noCaptureFile: {
           type: Boolean,
           value: false
@@ -139,30 +168,45 @@ Example:
           computed: '_computeSrc(videoFile)',
           notify: true
         },
+        /**
+         * The imported videos FileList, bind to the native ```<input type="file" accept="video/*">```'s files property.
+         */
         _importedVideos: Object
       },
-
+      /**
+       * Search a video to capture from your local disk.
+       */
       search: function() {
         this.$.videoSelector.dispatchEvent(new Event('click'));
       },
-
+      /**
+       * Take a capture of the current frame.
+       */
       _capture: function() {
         this.$.videoCapture.capture();
         this.refit();
       },
-
+      /**
+       * True if a capture was taken.
+       */
       _computeCaptured: function(captureUrl) {
         return captureUrl ? false : true;
       },
-
+      /**
+       * Returns the first imported video.
+       */
       _computeVideoFile: function(_importedVideos) {
         return _importedVideos[0];
       },
-
+      /**
+       * Expose the video as data Url and return the url.
+       */
       _computeSrc: function(videoFile) {
         return window.URL.createObjectURL(videoFile);
       },
-
+      /**
+       * Close the dialog and send 'capture-confirmed' event.
+       */
       _confirm : function() {
         this.close();
         this.fire('capture-confirmed');

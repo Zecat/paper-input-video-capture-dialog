@@ -2,9 +2,9 @@
 
 This element give you the ability to import a video from your local disk, and then open it in a dialog where you can play it and take a snapshot of the current frame. Once captured, you can confirm the dialog.
 
-To use, just bind to the attributes it provides, and call 'search()'.
+To use, just bind to the attributes it provides, and call 'search()' on it.
 
-This is just a wrapper arrount an input type file and [iron-video-capture](https://github.com/Zecat/iron-video-capture).
+It is just a wrapper arround an input type file and [iron-video-capture](https://github.com/Zecat/iron-video-capture), and it implement Polymer.PaperDialogBehavior.
 
 ## Demo & doc
 
