@@ -4,8 +4,7 @@
   "authors": [
     "Zecat <jullienfelix@gmail.com>"
   ],
-  "description": "Allows you to import a video, play it and take a snapshot of the 
-current frame in a paper-dialog",
+  "description": "Allows you to import a video, play it and take a snapshot of the current frame in a paper-dialog",
   "keywords": [
     "web-component",
     "polymer",
