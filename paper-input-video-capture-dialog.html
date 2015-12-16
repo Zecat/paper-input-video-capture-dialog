@@ -70,7 +70,7 @@ Example:
     <content></content>
     
     <input hidden id="videoSelector" files='{{_importedVideos::change}}' type="file" accept="video/*">
-    <video is="iron-video-capture" id="videoCapture" src="[[videoFile]]" controls
+    <video is="iron-video-capture" id="videoCapture" src="[[videoUrl]]" controls
     capture-url="{{captureUrl}}" capture-width="[[captureWidth]]" on-loadeddata="open"
     capture-file="{{captureFile}}" no-catpture-file="[[noCaptureFile]]">
     </video>
@@ -90,14 +90,6 @@ Example:
       is: 'paper-input-video-capture-dialog',
 
       properties: {
-        /**
-         * The imported video file.
-         */
-        videoFile: {
-          type: Object,
-          computed: '_computeVideoFile(_importedVideos)',
-          notify: true
-        },
         /**
          * The dialog's capture button text.
          */
@@ -160,12 +152,20 @@ Example:
           value: false
         },
         /**
-         * The imported video exposed as data URL.
+         * The imported video file.
          */
         videoFile: {
+          type: Object,
+          computed: '_computeVideoFile(_importedVideos)',
+          notify: true
+        },
+        /**
+         * The imported video exposed as data URL.
+         */
+        videoUrl: {
           type: String,
           value: '',
-          computed: '_computeSrc(videoFile)',
+          computed: '_computeVideoUrl(videoFile)',
           notify: true
         },
         /**
@@ -201,7 +201,7 @@ Example:
       /**
        * Expose the video as data Url and return the url.
        */
-      _computeSrc: function(videoFile) {
+      _computeVideoUrl: function(videoFile) {
         return window.URL.createObjectURL(videoFile);
       },
       /**

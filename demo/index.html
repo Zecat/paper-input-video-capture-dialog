@@ -23,19 +23,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <template is="dom-bind" id="scope">
       <paper-input-video-capture-dialog id="inputVideoCapture"
-        src="{{videoUrl}}" no-cancel-on-outside-click with-backdrop
-        capture-url="{{captureUrl}}" capture-width="{{captureWidth}}"
+        video-url="{{videoSrc}}" no-cancel-on-outside-click with-backdrop
+        capture-url="{{captureSrc}}" capture-width="{{captureWidth}}"
         capture-width="{{captureWidth}}" on-capture-confirmed="_setCaptureConfirmed"
-        capture-file="{{captureFile}}">
+        capture-file="{{captureFile}}" video-file="{{videoFile}}">
         <h2>Play the video and click "capture" to take a video snapshot.</h2>
       </paper-input-video-capture-dialog>
       <paper-input label="Capture width" type="number" value="{{captureWidth}}"></paper-input>
       <paper-button raised on-tap="search">SEARCH VIDEO TO CAPTURE</paper-button>
       <template is="dom-if" if="[[captureConfirmed]]">
         <h1>Selected video</h1>
-        <video controls src="[[videoUrl]]"></video>
+        <video controls src="[[videoSrc]]"></video>
         <h1>Selected video capture</h1>
-        <img src="[[captureUrl]]">
+        <img src="[[captureSrc]]">
       </template>
     </template>
 
@@ -47,7 +47,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     scope._setCaptureConfirmed = function() {
       this.captureConfirmed = true;
+      console.log('Capture file : ');
       console.log(scope.captureFile);
+      console.log('Video file : ');
+      console.log(scope.videoFile);
     }
     scope.captureWidth = 200;
     </script>
