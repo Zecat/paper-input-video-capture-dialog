@@ -67,8 +67,8 @@ Example:
 
     <content></content>
     
-    <input hidden id="videoSelector" files='{{importedVideosList::change}}' type="file" accept="video/*">
-    <video is="iron-video-capture" id="videoCapture" src="[[src]]" controls
+    <input hidden id="videoSelector" files='{{_importedVideos::change}}' type="file" accept="video/*">
+    <video is="iron-video-capture" id="videoCapture" src="[[videoFile]]" controls
     capture-url="{{captureUrl}}" capture-width="[[captureWidth]]" on-loadeddata="open"
     capture-file="{{captureFile}}" no-catpture-file="[[noCaptureFile]]">
     </video>
@@ -88,10 +88,9 @@ Example:
       is: 'paper-input-video-capture-dialog',
 
       properties: {
-        importedVideosList: Object,
-        importedVideo: {
+        videoFile: {
           type: Object,
-          computed: '_computeImportedVideo(importedVideosList)',
+          computed: '_computeVideoFile(_importedVideos)',
           notify: true
         },
         captureButtonText: {
@@ -131,12 +130,16 @@ Example:
           type: Boolean,
           value: false
         },
-        src: {
+        /**
+         * The imported video exposed as data URL.
+         */
+        videoFile: {
           type: String,
           value: '',
-          computed: '_computeSrc(importedVideo)',
+          computed: '_computeSrc(videoFile)',
           notify: true
-        }
+        },
+        _importedVideos: Object
       },
 
       search: function() {
@@ -152,12 +155,12 @@ Example:
         return captureUrl ? false : true;
       },
 
-      _computeImportedVideo: function(importedVideosList) {
-        return importedVideosList[0];
+      _computeVideoFile: function(_importedVideos) {
+        return _importedVideos[0];
       },
 
-      _computeSrc: function(importedVideo) {
-        return window.URL.createObjectURL(importedVideo);
+      _computeSrc: function(videoFile) {
+        return window.URL.createObjectURL(videoFile);
       },
 
       _confirm : function() {
