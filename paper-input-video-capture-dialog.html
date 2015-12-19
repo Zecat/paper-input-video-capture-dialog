@@ -10,6 +10,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../iron-video-capture/iron-video-capture.html">
 <link rel="import" href="../iron-image/iron-image.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="../neon-advanced-animations/scroll-animation.html">
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-dialog-behavior/paper-dialog-behavior.html">
@@ -83,8 +85,8 @@ Example:
     <content></content>
     </div>
     <input hidden id="videoSelector" files='{{_importedVideos::change}}' type="file" accept="video/*">
-    <paper-dialog-scrollable>
-      <video is="iron-video-capture" id="videoCapture" src="[[videoUrl]]" controls
+    <paper-dialog-scrollable id="scrollDialog">
+      <video is="iron-video-capture" id="videoToCapture" controls loop
         capture-url="{{captureUrl}}" capture-width="[[captureWidth]]" on-loadeddata="open"
         capture-file="{{captureFile}}" no-catpture-file="[[noCaptureFile]]">
       </video>
@@ -106,6 +108,17 @@ Example:
       is: 'paper-input-video-capture-dialog',
 
       properties: {
+        animationConfig: {
+          value: function() {
+            return {
+              'scroll-to-capture': {
+                name: 'scroll-animation',
+                node: this.$.scrollDialog.scrollTarget,
+                yShift: 'bottom'
+              }
+            };
+          }
+        },
         /**
          * The dialog's capture button text.
          */
@@ -180,14 +193,18 @@ Example:
          */
         videoUrl: {
           type: String,
-          value: '',
           computed: '_computeVideoUrl(videoFile)',
+          observer: '_videoUrlChange',
           notify: true
         },
         /**
          * The imported videos FileList, bind to the native ```<input type="file" accept="video/*">```'s files property.
          */
-        _importedVideos: Object
+        _importedVideos: Object,
+      },
+
+      listeners: {
+        'iron-overlay-closed': '_reset'
       },
       /**
        * Search a video to capture from your local disk.
@@ -199,8 +216,9 @@ Example:
        * Take a capture of the current frame.
        */
       _capture: function() {
-        this.$.videoCapture.capture();
+        this.$.videoToCapture.capture();
         this.refit();
+        this.playAnimation('scroll-to-capture');
       },
       /**
        * True if a capture was taken.
@@ -227,8 +245,22 @@ Example:
         this.close();
         this.fire('capture-confirmed');
       },
+      /**
+       * Reset the video src and the input value.
+       */
+      _reset: function() {
+        this.$.videoToCapture.setAttribute('src', '');
+        this.$.videoSelector.value = "";
+      },
+      /**
+       * Set the video src from the new videoUrl
+       */
+      _videoUrlChange: function(videoUrl) {
+        this.$.videoToCapture.setAttribute('src', videoUrl);
+      },
 
       behaviors: [
+        Polymer.NeonAnimationRunnerBehavior,
         Polymer.PaperDialogBehavior
       ]
 
