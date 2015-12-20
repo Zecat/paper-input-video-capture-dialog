@@ -1,0 +1,170 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../polymer/polymer.html">
+<script src="../blueimp-canvas-to-blob/js/canvas-to-blob.js"></script>
+<!--
+An element extending the native video element, make it easy to capture a video frame. 
+Usefull for a user to choose a video's image preview.
+For now, it just capture the current frame.
+
+  ```html
+  <template is="dom-bind" id="scope">
+
+    <style>
+      video {
+        width: 420px;
+        height: 315px;
+      }
+      img {
+        width: 200px;
+        height: auto;
+      }
+    </style>
+
+    <video is="iron-video-capture" id="video"
+      controls loop src="video/video.mp4"
+      capture-url="{{captureUrl}}" capture-width="200">
+    </video>
+    <img src="[[captureUrl]]">
+    <button on-tap="capture">Prendre une capture</button>
+      
+  </template>
+
+    <script>
+      var scope = document.getElementById('scope');
+      scope.capture = function() {
+        this.$.video.capture();
+      }
+    </script>
+
+  ```
+
+## Warning: provide the video from your domaine
+
+Internally it use a canvas element, due to CORS, the video can not come from 
+an external domaine, otherwise, you'll receive a "Uncaught SecurityError: 
+Failed to execute 'toDataURL' on 'HTMLCanvasElement': Tainted canvases may 
+not be exported.". Tell me if you find a solution about that !
+
+@group Iron Elements
+@element iron-video-capture
+@demo demo/index.html
+@hero hero.svg
+-->
+
+<script>
+
+  Polymer({
+
+    is: 'iron-video-capture',
+
+    extends: 'video',
+
+    properties: {
+      /**
+       * The capture exposed as Blob.
+       */
+      captureFile: {
+        type: Object,
+        value: function() {
+          return {};
+        },
+        notify: true
+      },
+      /**
+       * The capture exposed as data URL.
+       */
+      captureUrl: {
+        type: String,
+        value: '',
+        notify: true
+      },
+      /**
+       * The width of the capture. Height is calculated proportionally.
+       */
+      captureWidth:  {
+        type: Number,
+        value: 0
+      },
+      /**
+       * The native video's src attribute.
+       */
+      src: {
+        type: String,
+        value: ''
+      },
+      /**
+       * Set to true to improve performance if you don't intend to use the 
+       * capture-url propertie.
+       */
+      noCaptureUrl: {
+        type: Boolean,
+        value: false
+      },
+      /**
+       * Set to true to improve performance if you don't intend to use the 
+       * capture-file propertie.
+       */
+      noCaptureFile: {
+        type: Boolean,
+        value: false
+      },
+      /**
+       * The canvas used to extract a video frame.
+       */
+      _canvas: {
+        type: Object,
+        value : function() {
+          return document.createElement('canvas');
+        }
+      }
+    },
+    /**
+     * Take a capture of the current video's frame and expose it as data URL (type png) within captureUrl attribute.
+     */
+    capture: function() {
+      // if a video is present
+      if (this.videoWidth) {
+        // to call in observer on this.captureWidth & native video.videoWidth var
+        this._ensureResize();
+        this._canvas.getContext('2d').drawImage(this, 0, 0);
+        if (!this.noCaptureUrl) {
+          this.captureUrl = this._canvas.toDataURL();
+        }
+        if(!this.noCaptureFile) {
+          this._canvas.toBlob(function(blob) {
+            this.captureFile = blob;
+          }.bind(this));
+        }
+      }
+    },
+    /**
+     *  Call this method when you've finished using captureUrl property, in 
+     *  order to let the browser know it doesn't need to keep the reference 
+     *  to the file any longer.
+     */
+    revokeCaptureUrl: function() {
+      URL.revokeObjectURL(this.captureUrl);
+    },
+    _ensureResize: function() {
+      if (this._canvas.width != this.captureWidth) {
+        this._canvas.getContext('2d').resetTransform();
+        var scaleFactor = this.captureWidth / this.videoWidth;
+        this._canvas.width = this.captureWidth;
+        this._canvas.height = this.videoHeight * scaleFactor;
+        this._canvas.getContext('2d').scale(scaleFactor, scaleFactor);
+        this.revokeCaptureUrl();
+        this.captureUrl = this._canvas.toDataURL();
+      }
+    }
+
+  });
+
+</script>

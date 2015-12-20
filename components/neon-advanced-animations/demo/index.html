@@ -1,0 +1,55 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>neon-advanced-animations Demo</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../../paper-button/paper-button.html">
+    <link rel="import" href="scroll-me.html">
+  </head>
+  <body unresolved>
+
+    <template is="dom-bind" id="scope">
+      <scroll-me id="scrollable"></scroll-me>
+      <paper-button on-tap="xShift">horizontal scroll 100 px</paper-button>
+      <paper-button on-tap="yShift">vertical scroll 100 px</paper-button>
+      <paper-button on-tap="leftShift">Scroll to Left</paper-button>
+      <paper-button on-tap="rightShift">Scroll to right</paper-button>
+      <paper-button on-tap="topShift">Scroll to Top</paper-button>
+      <paper-button on-tap="bottomShift">Scroll to Bottom</paper-button>
+    </template>
+
+    <script>
+      var scope = document.getElementById('scope');
+      scope.xShift = function() {
+        this.$.scrollable.xShift();
+      };
+      scope.yShift = function() {
+        this.$.scrollable.yShift();
+      };
+      scope.leftShift = function() {
+        this.$.scrollable.leftShift();
+      };
+      scope.rightShift = function() {
+        this.$.scrollable.rightShift();
+      };
+      scope.topShift = function() {
+        this.$.scrollable.topShift();
+      };
+      scope.bottomShift = function() {
+        this.$.scrollable.bottomShift();
+      };
+    </script>
+
+  </body>
+</html>

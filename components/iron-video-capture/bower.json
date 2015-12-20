@@ -1,0 +1,28 @@
+{
+  "name": "iron-video-capture",
+  "version": "1.0.0",
+  "authors": [
+    "Zecat jullienfelix@gmail.com>"
+  ],
+  "description": "An element extending the native video element, make it easy to capture a video frame.",
+  "keywords": [
+    "web-component",
+    "polymer",
+    "seed"
+  ],
+  "main": "iron-video-capture.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/Zecat/iron-video-capture/",
+  "ignore": [
+    "/.*",
+    "/test/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.2.0",
+    "blueimp-canvas-to-blob": "~2.2.2"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "^3.4.0"
+  }
+}
