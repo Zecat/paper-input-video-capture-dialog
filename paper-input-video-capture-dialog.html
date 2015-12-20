@@ -186,6 +186,7 @@ Example:
         videoFile: {
           type: Object,
           computed: '_computeVideoFile(_importedVideos)',
+          observer: '_videoFileChange',
           notify: true
         },
         /**
@@ -250,7 +251,13 @@ Example:
        */
       _reset: function() {
         this.$.videoToCapture.setAttribute('src', '');
-        this.$.videoSelector.value = "";
+        this.$.videoSelector.value = '';
+      },
+      /**
+       * Reset the captureUrl.
+       */
+      _videoFileChange: function() {
+        this.captureUrl = '';
       },
       /**
        * Set the video src from the new videoUrl
