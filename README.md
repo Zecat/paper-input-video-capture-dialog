@@ -16,7 +16,9 @@ bower install --save Zecat/paper-input-video-capture-dialog
 
 ### Todo
 
-- support multiple videos & multiple capture per video using neon-slideshow.
+- support multiple videos & multiple capture per video using neon-slideshow & Polymer.IronSelectableBehavior.
 - use paper-tile-rename to display capture and update they name in the blob file.
 - implement iron-form-element-behavior
 - change the logic to extend the native input ?
+- change the repo's name & logic to paper-video-capture and add it paper-video-capture-dialog &  paper-input-video-capture-dialog
+- support drag & drop
